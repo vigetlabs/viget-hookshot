@@ -1,0 +1,3 @@
+/.bundle/*
+/config/*.yml
+/coverage/*

@@ -1,0 +1,4 @@
+url: ci.jenkins-ci.org
+username:
+password:
+auth_token: sekret
