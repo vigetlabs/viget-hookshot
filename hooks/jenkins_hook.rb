@@ -1,40 +1,54 @@
 require 'json'
 
-require_relative './jenkins_hook/configuration'
+Dir["#{settings.root}/hooks/jenkins_hook/**/*.rb"].each{ |f| require f }
 
 module Hooks
   class JenkinsHook
-    attr_reader :payload, :branches
-
     DEFAULT_BRANCHES = %w(master)
+
+    @@path = 'jenkins'
+
+    def self.path
+      @@path
+    end
 
     def initialize(application)
       @application = application
-      @payload     = parse_payload(params[:payload])
-      @branches    = parse_branches(params[:branches])
-    end
-
-    def valid?
-      valid_payload? && valid_branch?
     end
 
     def process!
       if valid?
         trigger_build
-        logger.info "[Jenkins Hook] #{payload_branch} was valid. Payload Delivered!"
+        logger.info "[#{self}] #{payload_branch} was valid. Payload Delivered!"
       else
-        logger.info "[Jenkins Hook] Payload was invalid. Payload Not Delivered!"
+        logger.info "[#{self}] Payload was invalid. Payload Not Delivered!"
       end
+    end
+
+    def to_s
+      'Jenkins Hook'
     end
 
 
     private
+
+    def payload
+      @payload ||= parse_payload(params[:payload])
+    end
+
+    def branches
+      @branches ||= parse_branches(params[:branches])
+    end
 
     #:nocov:
     def trigger_build
       `curl #{config.url}`
     end
     #:nocov:
+
+    def valid?
+      valid_payload? && valid_branch?
+    end
 
     def parse_payload(payload)
       (payload =~ /\A{.*}\z/) ? JSON.parse(payload) : nil
@@ -69,7 +83,7 @@ module Hooks
     end
 
     def config
-      Configuration.new(params[:project])
+      @config ||= Configuration.new(params[:project])
     end
   end
 end

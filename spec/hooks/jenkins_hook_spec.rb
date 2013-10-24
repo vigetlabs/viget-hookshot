@@ -17,9 +17,11 @@ describe Hooks::JenkinsHook do
     end
 
     describe "parsing branches" do
+      let(:branches) { subject.send(:branches) }
+
       context "when no branch is specified" do
         it "returns default branches" do
-          subject.branches.should == described_class::DEFAULT_BRANCHES
+          branches.should == described_class::DEFAULT_BRANCHES
         end
       end
 
@@ -27,7 +29,7 @@ describe Hooks::JenkinsHook do
         let(:params) { { branches: 'feature' }}
 
         it "returns the specified branch" do
-          subject.branches.should == %w(feature)
+          branches.should == %w(feature)
         end
       end
 
@@ -35,15 +37,17 @@ describe Hooks::JenkinsHook do
         let(:params) { { branches: 'feature1,feature_2,feature-3' }}
 
         it "returns all specified branches split on comma" do
-          subject.branches.should == %w(feature1 feature_2 feature-3)
+          branches.should == %w(feature1 feature_2 feature-3)
         end
       end
     end
 
     describe "parsing payload" do
+      let(:payload) { subject.send(:payload) }
+
       context "when no payload is given" do
         it "returns nil" do
-          subject.payload.should be_nil
+          payload.should be_nil
         end
       end
 
@@ -51,7 +55,7 @@ describe Hooks::JenkinsHook do
         let(:params) { { payload: '{lolhakked' }}
 
         it "returns nil" do
-          subject.payload.should be_nil
+          payload.should be_nil
         end
       end
 
@@ -59,7 +63,7 @@ describe Hooks::JenkinsHook do
         let(:params) { { payload: %q[{"ref":"refs/heads/master"}] }}
 
         it "returns hash" do
-          subject.payload.should == { 'ref' => 'refs/heads/master' }
+          payload.should == { 'ref' => 'refs/heads/master' }
         end
       end
     end

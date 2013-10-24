@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/namespace'
 
-require_relative './hooks/jenkins_hook'
+Dir["#{settings.root}/hooks/*.rb"].each{ |f| require f }
 
 get '/' do
   'Huzzah!  If you see this page, then Viget Hookshot should be working correctly.'
@@ -9,14 +9,16 @@ end
 
 namespace '/hooks' do
   before do
-    ensure_from_github!
+    ensure_from_github! unless settings.environment == :development
   end
 
-  post '/jenkins' do
-    hook = Hooks::JenkinsHook.new(self)
-    hook.process!
+  Hooks.constants.collect{ |k| Hooks.const_get(k) }.each do |klass|
+    post "/#{klass.path}" do
+      hook = klass.new(self)
+      hook.process!
 
-    logger.info '[Jenkins Hook] completed processing'
+      logger.info "[#{hook}] completed processing"
+    end
   end
 
   def ensure_from_github!

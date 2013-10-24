@@ -13,6 +13,9 @@ module Hooks
         "http://#{authentication_string}#{base_url}/job/#{project}/build?token=#{auth_token}"
       end
 
+
+      private
+
       def authentication_string
         "#{username}:#{password}@" if username? && password?
       end
@@ -41,11 +44,8 @@ module Hooks
         @auth_token ||= ENV['JENKINS_AUTH_TOKEN'] || file_contents['auth_token']
       end
 
-
-      private
-
       def field_present?(field)
-        field.respond_to?(:blank?) ? field.blank? : field
+        field.respond_to?(:empty?) ? !field.empty? : field
       end
 
       def file_contents
