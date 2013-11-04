@@ -3,9 +3,7 @@ require 'sinatra/namespace'
 require 'active_support/inflector/inflections'
 require 'active_support/core_ext/string'
 
-Dir[File.join(Dir.pwd, 'hooks', '**', '*.rb')].each{ |f| require f }
-
-available_hooks = Hooks.constants.reject{ |k| k == :Hook }
+require_relative 'lib/hooks/init'
 
 
 get '/' do
@@ -17,7 +15,7 @@ namespace '/hooks' do
     ensure_from_github! unless settings.environment == :development
   end
 
-  available_hooks.collect{ |k| Hooks.const_get(k) }.each do |klass|
+  Hooks.constants.collect{ |k| Hooks.const_get(k) }.each do |klass|
     post "/#{klass.path}" do
       hook = klass.new(self)
       hook.process!
