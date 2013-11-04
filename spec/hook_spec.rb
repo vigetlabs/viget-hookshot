@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hooks::Hook do
+describe Hook do
   subject { described_class.new(app) }
 
   describe "#process!" do
