@@ -1,7 +1,7 @@
 require 'yaml'
 
 module Hooks
-  class JenkinsHook
+  class JenkinsHook < Hook
     class Configuration
       attr_reader :project
 
@@ -29,7 +29,7 @@ module Hooks
       end
 
       def username?
-        field_present?(username)
+        username.present?
       end
 
       def password
@@ -37,15 +37,11 @@ module Hooks
       end
 
       def password?
-        field_present?(password)
+        password.present?
       end
 
       def auth_token
         @auth_token ||= ENV['JENKINS_AUTH_TOKEN'] || file_contents['auth_token']
-      end
-
-      def field_present?(field)
-        field.respond_to?(:empty?) ? !field.empty? : field
       end
 
       def file_contents

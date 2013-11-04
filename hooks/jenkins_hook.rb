@@ -1,20 +1,10 @@
 require 'json'
 
-Dir["#{settings.root}/hooks/jenkins_hook/**/*.rb"].each{ |f| require f }
-
 module Hooks
-  class JenkinsHook
+  class JenkinsHook < Hook
     DEFAULT_BRANCHES = %w(master)
 
-    @@path = 'jenkins'
-
-    def self.path
-      @@path
-    end
-
-    def initialize(application)
-      @application = application
-    end
+    hook_at :jenkins
 
     def process!
       if valid?
@@ -23,10 +13,6 @@ module Hooks
       else
         logger.info "[#{self}] Payload was invalid. Payload Not Delivered!"
       end
-    end
-
-    def to_s
-      'Jenkins Hook'
     end
 
 
@@ -72,14 +58,6 @@ module Hooks
 
     def payload_ref
       payload['ref']
-    end
-
-    def params
-      @application.params
-    end
-
-    def logger
-      @application.logger
     end
 
     def config
