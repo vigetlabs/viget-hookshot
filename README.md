@@ -21,3 +21,7 @@ Please create a feature branch and issue a Pull Request for all new features
 and bug fixes.  Ensure the test suite passes before issuing a Pull Request.
 
 Thanks!
+
+## License
+
+Protected under the MIT License. Read more [here](./LICENSE)
