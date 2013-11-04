@@ -13,14 +13,15 @@ the madness.
 
 Viget Hookshot can be extended to your heart's desire.  Maybe you want to
 notify Campfire when the production branch has been updated.  Maybe you want to
-deploy to a staging environment when the staging branch has been updated.
+deploy to a staging environment when the staging branch has been updated.  Let
+your imagination run wild!
 
 ## Contributing
 
 Please create a feature branch and issue a Pull Request for all new features
 and bug fixes.  Ensure the test suite passes before issuing a Pull Request.
 
-Thanks!
+Thanks in advance for your contribution!
 
 ## License
 
