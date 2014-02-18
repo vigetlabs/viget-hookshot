@@ -16,6 +16,22 @@ notify Campfire when the production branch has been updated.  Maybe you want to
 deploy to a staging environment when the staging branch has been updated.  Let
 your imagination run wild!
 
+## Configuration to Only Build Specified Branches
+
+* Add the Github WebHook URL ( https://github.com/vigetlabs/[project name]/settings/hooks )
+    * Base URL: http://viget-hookshot.herokuapp.com/hooks/jenkins
+    * Params:
+        * project (required): the name of the Jenkins project
+        * branches (optional): a comma-delimited list of branches to trigger builds from.  Default is `master`.
+    * Example:
+        * http://viget-hookshot.herokuapp.com/hooks/jenkins?project=Puma&branches=master
+
+* Configure the Jenkins project
+    * Under the “Build Triggers” section, there is an option for “Trigger builds remotely”.  Check the box.
+    * Enter `YOUR_AUTH_TOKEN_HERE` as the Authentication Token
+
+* Celebrate for a job well done and for great Jenkins justice!
+
 ## Contributing
 
 Please create a feature branch and issue a Pull Request for all new features
