@@ -25,7 +25,7 @@ namespace '/hooks' do
   end
 
   def ensure_from_github!
-    unless env['HTTP_USER_AGENT'] =~ %r{\AGitHub Hookshot}
+    unless env['HTTP_USER_AGENT'] =~ %r{\AGitHub-Hookshot}
       halt 403, 'You are not permitted to make this request!'
     end
   end
